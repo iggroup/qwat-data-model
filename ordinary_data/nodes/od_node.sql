@@ -101,11 +101,13 @@ CREATE OR REPLACE FUNCTION qwat_od.ft_pipe_node_moved() RETURNS TRIGGER AS
             -- In that case, we can create a new node, and affect it to the pipe
             new_node_a := qwat_od.fn_node_create(start_geom);
             UPDATE qwat_od.pipe SET fk_node_a = new_node_a WHERE fk_node_a = OLD.id;
+            PERFORM qwat_od.fn_node_set_type(new_node_a);
         END IF;
         IF end_geom IS NOT NULL THEN
             -- In that case, we can create a new node, and affect it to the pipe
             new_node_b := qwat_od.fn_node_create(end_geom);
             UPDATE qwat_od.pipe SET fk_node_b = new_node_b WHERE fk_node_b = OLD.id;
+            PERFORM qwat_od.fn_node_set_type(new_node_b);
         END IF;
         RETURN NEW;
     END;
